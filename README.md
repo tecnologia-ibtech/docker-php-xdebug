@@ -1,4 +1,4 @@
-# docker-php-xbug
+# docker-php-xdebug
 
 Repositório para build automatico de PHP (FPM exclusivamente)
 
