@@ -6,7 +6,7 @@ RUN set -ex; \
 	apt-get install -y \
 		git \
 		libjpeg-dev \
-		libpng12-dev \
+		libpng-dev \
 		libxml2-dev \
 	; \
 	cd /root; \
