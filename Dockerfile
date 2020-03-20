@@ -1,20 +1,24 @@
-FROM php:5.6-fpm-alpine
+FROM php:7.0-fpm
 
-RUN addgroup -g 10099 ibtech-www \
-    && adduser -u 10099 -G ibtech-www -H -D -s /sbin/nologin ibtech-www \
-    && apk add --update freetype-dev libjpeg-turbo-dev libmcrypt-dev libpng-dev libxml2-dev \
-    && docker-php-ext-install iconv mcrypt \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
-    && docker-php-ext-install opcache \
-    && docker-php-ext-install mbstring \
-    && docker-php-ext-install gd \
-    && docker-php-ext-install pdo_mysql \
-    && docker-php-ext-install mysqli \
-    && docker-php-ext-install soap \
-    && docker-php-ext-install sockets \
-    && docker-php-ext-install shmop \
-    && docker-php-ext-install zip \
-    && rm -rf /var/cache/apk/*
+RUN set -ex; \
+	\
+	apt-get update; \
+	apt-get install -y \
+		git \
+		libjpeg-dev \
+		libpng12-dev \
+		libxml2-dev \
+	; \
+	cd /root; \
+	apt-get autoremove -y; \
+	rm -rf /var/lib/apt/lists/*; \
+	apt-get clean; \
+	\
+	docker-php-ext-configure gd --with-png-dir=/usr --with-jpeg-dir=/usr; \
+	docker-php-ext-install pdo pdo_mysql mbstring tokenizer xml gd mysqli opcache soap sockets shmop zip
 
 COPY config/php.ini /usr/local/etc/php/php.ini
-COPY config/php-fpm.conf /usr/local/etc/php-fpm.conf
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+
+ENTRYPOINT ["sh","/docker-entrypoint.sh"]
+CMD ["php-fpm"]
