@@ -29,6 +29,7 @@ RUN echo "xdebug.remote_autostart=1" | tee -a /usr/local/etc/php/conf.d/docker-p
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 RUN composer install
+RUN composer dump-autoload --optimize && composer run-script post-install-cmd
 
 COPY config/php.ini /usr/local/etc/php/php.ini
 COPY docker-entrypoint.sh /docker-entrypoint.sh
