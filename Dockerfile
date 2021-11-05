@@ -27,8 +27,7 @@ RUN echo "xdebug.remote_autostart=1" | tee -a /usr/local/etc/php/conf.d/docker-p
     echo "xdebug.remote_host=172.17.0.1" | tee -a /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini > /dev/null
 
 # Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
+RUN php -r "readfile('http://getcomposer.org/installer');" | php -- --install-dir=/usr/bin/ --filename=composer
 
 COPY config/php.ini /usr/local/etc/php/php.ini
 COPY docker-entrypoint.sh /docker-entrypoint.sh
